@@ -2,11 +2,16 @@ package com.example.demo.controller;
 
 import com.example.demo.dto.CreateProductDto;
 import com.example.demo.dto.CreateTariffDto;
+import com.example.demo.dto.ProductAudDto;
 import com.example.demo.dto.ProductDto;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
+
+import java.util.HashSet;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api")
@@ -37,7 +42,7 @@ public class ApiController {
     }
 
     @PostMapping("/createProduct")
-    public ResponseEntity<?> createProduct(@RequestBody CreateProductDto dto) {
+    public ResponseEntity<?> createProduct(@RequestBody CreateProductDto dto) throws Exception{
         String targetUrl = "http://backendProducts:8093/product/create";
 
         HttpHeaders headers = new HttpHeaders();
@@ -148,7 +153,26 @@ public class ApiController {
                 id
         );
 
-        // Возвращаем клиенту тело и статус от второго сервиса
+        return ResponseEntity.status(responseEntity.getStatusCode())
+                .body(responseEntity.getBody());
+    }
+
+    @GetMapping("/getPreviousProductVersions/{id}")
+    public ResponseEntity<Set<ProductAudDto>> getPreviousProductVersions(@PathVariable("id") Integer id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        String targetUrl = "http://backendProducts:8093/product/peviousVersions/{id}";
+        //Set<ProductAudDto> productAudDtoSet = new HashSet<>();
+        ResponseEntity<Set<ProductAudDto>> responseEntity = restTemplate.exchange(
+                targetUrl,
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<Set<ProductAudDto>>() {},
+                id
+        );
+
         return ResponseEntity.status(responseEntity.getStatusCode())
                 .body(responseEntity.getBody());
     }
