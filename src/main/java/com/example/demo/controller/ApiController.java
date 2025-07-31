@@ -9,7 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.*;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Instant;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -171,6 +173,34 @@ public class ApiController {
                 requestEntity,
                 new ParameterizedTypeReference<Set<ProductAudDto>>() {},
                 id
+        );
+
+        return ResponseEntity.status(responseEntity.getStatusCode())
+                .body(responseEntity.getBody());
+    }
+
+    @GetMapping("/getVersionsForPeriod/{id}")
+    public ResponseEntity<Set<ProductAudDto>> getVersionsForPeriod(
+            @PathVariable("id") Integer id,
+            @RequestParam Instant startTimeDate,
+            @RequestParam Instant endTimeDate
+    ) {
+        String targetUrl = "http://backendProducts:8093/product/versionsForPeriod/{id}";
+        String url = UriComponentsBuilder.fromHttpUrl(targetUrl)
+                .queryParam("startTimeDate", startTimeDate.toString())
+                .queryParam("endTimeDate", endTimeDate.toString())
+                .buildAndExpand(id)
+                .toUriString();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<Set<ProductAudDto>> responseEntity = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                requestEntity,
+                new ParameterizedTypeReference<Set<ProductAudDto>>() {}
         );
 
         return ResponseEntity.status(responseEntity.getStatusCode())

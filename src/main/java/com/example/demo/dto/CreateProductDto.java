@@ -5,13 +5,13 @@ import java.time.Instant;
 public class CreateProductDto {
     private String name;
     private Integer tariffId;
-    private Instant timeAndDate;
+    private Instant timedate;
 
 
-    public CreateProductDto(String name, String conditions, Integer tariffId, Instant timeAndDate) {
+    public CreateProductDto(String name, String conditions, Integer tariffId, Instant timedate) {
         this.name = name;
         this.tariffId = tariffId;
-        this.timeAndDate = timeAndDate;
+        this.timedate = timedate;
     }
 
     public String getName() {
@@ -23,7 +23,7 @@ public class CreateProductDto {
         return tariffId;
     }
 
-    public Instant getTimeAndDate() {
-        return timeAndDate;
+    public Instant getTimedate() {
+        return timedate;
     }
 }

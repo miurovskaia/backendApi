@@ -11,7 +11,7 @@ public class ProductAudDto {
     private Integer id;
     private String name;
     private Integer tariffId;
-    private Instant timeAndDate;
+    private Instant timedate;
 
     private Integer rev;
     private Integer revtype;
@@ -58,12 +58,12 @@ public class ProductAudDto {
     public void setName(String name) {
         this.name = name;
     }
-    public Instant getTimeAndDate() {
-        return timeAndDate;
+    public Instant getTimedate() {
+        return timedate;
     }
 
-    public void setTimeAndDate(Instant timeAndDate) {
-        this.timeAndDate = timeAndDate;
+    public void setTimedate(Instant timedate) {
+        this.timedate = timedate;
     }
 
     public Integer getTariffId() {
@@ -83,7 +83,7 @@ public class ProductAudDto {
                 ", rev='" + rev + '\'' +
                 ", revtype='" + revtype + '\'' +
                 ", version='" + version + '\'' +
-                ", timeAndDate='" + timeAndDate + '\'' +
+                ", timedate='" + timedate + '\'' +
                 '}';
     }
 }
