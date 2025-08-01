@@ -207,4 +207,21 @@ public class ApiController {
                 .body(responseEntity.getBody());
     }
 
+    @GetMapping("/revertToPrevVersion/{id}")
+    public ResponseEntity<Void> revertToPrevVersion(@PathVariable("id") Integer id) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
+        String targetUrl = "http://backendProducts:8093/product/revertToPreviousVersion/{id}";
+        ResponseEntity<Void> responseEntity = restTemplate.exchange(
+                targetUrl,
+                HttpMethod.GET,
+                requestEntity,
+                Void.class,
+                id
+        );
+
+        return ResponseEntity.status(responseEntity.getStatusCode()).build();
+    }
+
 }
