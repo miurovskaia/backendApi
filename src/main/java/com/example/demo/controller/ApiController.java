@@ -26,11 +26,12 @@ public class ApiController {
     }
 
     @PostMapping("/createTariff")
-    public ResponseEntity<?> сreateTariff(@RequestBody CreateTariffDto dto) {
+    public ResponseEntity<?> сreateTariff(@RequestBody CreateTariffDto dto, @RequestHeader(value = "Authorization", required = true) String bearerString) {
         String targetUrl = "http://backendTarriffs:8091/tariff/create";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(bearerString.substring(7));
 
         HttpEntity<CreateTariffDto> requestEntity = new HttpEntity<>(dto, headers);
 
@@ -44,12 +45,12 @@ public class ApiController {
     }
 
     @PostMapping("/createProduct")
-    public ResponseEntity<?> createProduct(@RequestBody CreateProductDto dto) throws Exception{
+    public ResponseEntity<?> createProduct(@RequestBody CreateProductDto dto, @RequestHeader(value = "Authorization", required = true) String bearerString) throws Exception{
         String targetUrl = "http://backendProducts:8093/product/create";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<CreateProductDto> requestEntity = new HttpEntity<>(dto, headers);
 
         ResponseEntity<Integer> responseEntity = restTemplate.postForEntity(
@@ -63,13 +64,13 @@ public class ApiController {
     @PutMapping("/updateTariff/{id}")
     public ResponseEntity<?> updateTariff(
             @RequestBody CreateTariffDto dto,
-            @PathVariable String id) {
+            @PathVariable String id, @RequestHeader(value = "Authorization", required = true) String bearerString) {
 
         String targetUrl = "http://backendTarriffs:8091/tariff/update/" + id;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<CreateTariffDto> requestEntity = new HttpEntity<>(dto, headers);
 
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
@@ -85,13 +86,13 @@ public class ApiController {
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<?> updateProduct(
             @RequestBody CreateProductDto dto,
-            @PathVariable String id) {
+            @PathVariable String id, @RequestHeader(value = "Authorization", required = true) String bearerString) {
 
         String targetUrl = "http://backendProducts:8093/product/update/" + id;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<CreateProductDto> requestEntity = new HttpEntity<>(dto, headers);
 
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
@@ -105,11 +106,12 @@ public class ApiController {
     }
 
     @DeleteMapping("/deleteTariff/{id}")
-    public ResponseEntity<?> deleteTariff(@PathVariable String id) {
+    public ResponseEntity<?> deleteTariff(@PathVariable String id, @RequestHeader(value = "Authorization", required = true) String bearerString) {
 
         String targetUrl = "http://backendTarriffs:8091/tariff/delete/{id}";
 
         HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
@@ -123,11 +125,12 @@ public class ApiController {
     }
 
     @DeleteMapping("/deleteProduct/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable String id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable String id, @RequestHeader(value = "Authorization", required = true) String bearerString) {
 
         String targetUrl = "http://backendProducts:8093/product/delete/{id}";
 
         HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
@@ -141,10 +144,10 @@ public class ApiController {
     }
 
     @GetMapping("/getCurrentProductVersion/{id}")
-    public ResponseEntity<ProductDto> getProduct(@PathVariable("id") Integer id) {
+    public ResponseEntity<ProductDto> getProduct(@PathVariable("id") Integer id, @RequestHeader(value = "Authorization", required = true) String bearerString) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
         String targetUrl = "http://backendProducts:8093/product/{id}";
         ResponseEntity<ProductDto> responseEntity = restTemplate.exchange(
@@ -160,10 +163,10 @@ public class ApiController {
     }
 
     @GetMapping("/getPreviousProductVersions/{id}")
-    public ResponseEntity<Set<ProductAudDto>> getPreviousProductVersions(@PathVariable("id") Integer id) {
+    public ResponseEntity<Set<ProductAudDto>> getPreviousProductVersions(@PathVariable("id") Integer id, @RequestHeader(value = "Authorization", required = true) String bearerString) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
         String targetUrl = "http://backendProducts:8093/product/peviousVersions/{id}";
         //Set<ProductAudDto> productAudDtoSet = new HashSet<>();
@@ -183,7 +186,8 @@ public class ApiController {
     public ResponseEntity<Set<ProductAudDto>> getVersionsForPeriod(
             @PathVariable("id") Integer id,
             @RequestParam Instant startTimeDate,
-            @RequestParam Instant endTimeDate
+            @RequestParam Instant endTimeDate,
+            @RequestHeader(value = "Authorization", required = true) String bearerString
     ) {
         String targetUrl = "http://backendProducts:8093/product/versionsForPeriod/{id}";
         String url = UriComponentsBuilder.fromHttpUrl(targetUrl)
@@ -194,6 +198,7 @@ public class ApiController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 
         ResponseEntity<Set<ProductAudDto>> responseEntity = restTemplate.exchange(
@@ -208,9 +213,10 @@ public class ApiController {
     }
 
     @GetMapping("/revertToPrevVersion/{id}")
-    public ResponseEntity<Void> revertToPrevVersion(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> revertToPrevVersion(@PathVariable("id") Integer id, @RequestHeader(value = "Authorization", required = true) String bearerString) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setBearerAuth(bearerString.substring(7));
         HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
         String targetUrl = "http://backendProducts:8093/product/revertToPreviousVersion/{id}";
         ResponseEntity<Void> responseEntity = restTemplate.exchange(
