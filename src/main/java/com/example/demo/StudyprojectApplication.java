@@ -1,7 +1,9 @@
 package com.example.demo;
 
+import com.example.demo.auth.AuthFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
@@ -15,4 +17,11 @@ public class StudyprojectApplication {
 		SpringApplication.run(StudyprojectApplication.class, args);
 	}
 
+	@Bean
+	public FilterRegistrationBean<AuthFilter> authFilter() {
+		FilterRegistrationBean<AuthFilter> registrationBean = new FilterRegistrationBean<>();
+		registrationBean.setFilter(new AuthFilter(restTemplate()));
+		registrationBean.addUrlPatterns("/api/*");
+		return registrationBean;
+	}
 }
